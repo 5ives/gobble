@@ -1,0 +1,11 @@
+Plan:
+- Begin implementations on a website (since app development isn't well understood yet)
+- Plan database 
+- Create wireframes for GUI
+- Use Django to prototype websites
+- Implement patents before release of beta
+- Come up with business rules/requirements 
+
+Features:
+- Promotions with individual food stores
+- Connections with other food applications (eg. Uber Eats - allow ordering once dot on map has been selected)
