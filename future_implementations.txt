@@ -9,3 +9,10 @@ Plan:
 Features:
 - Promotions with individual food stores
 - Connections with other food applications (eg. Uber Eats - allow ordering once dot on map has been selected)
+
+Things to work on:
+- Django
+- Comprehensive list of features
+- PHP
+- Linking Atom with GitHub and VS Code
+- Finish draft website template
