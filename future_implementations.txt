@@ -1,10 +1,10 @@
 Plan:
-- Begin implementations on a website (since app development isn't well understood yet)
 - Plan database 
 - Create wireframes for GUI
 - Use Django to prototype websites
 - Implement patents before release of beta
 - Come up with business rules/requirements 
+- Acquire Google API
 
 Features:
 - Promotions with individual food stores
@@ -14,7 +14,10 @@ Things to work on:
 - Django
 - Comprehensive list of features
 - PHP
-- Linking Atom with GitHub and VS Code
 - Finish draft website template
 - Learning webscraping using bs4
 - Setting up Virtual Machine on computer to run code natively
+- Generate an algorithm to extract needed features from API to produce successful .xml file for map's nodes
+- Work on website draft
+- Find out a way to extract prices from menus --> generate unique algorithm to acquire as well 
+
