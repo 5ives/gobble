@@ -20,4 +20,3 @@ Things to work on:
 - Generate an algorithm to extract needed features from API to produce successful .xml file for map's nodes
 - Work on website draft
 - Find out a way to extract prices from menus --> generate unique algorithm to acquire as well 
-
