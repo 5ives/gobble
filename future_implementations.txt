@@ -16,3 +16,5 @@ Things to work on:
 - PHP
 - Linking Atom with GitHub and VS Code
 - Finish draft website template
+- Learning webscraping using bs4
+- Setting up Virtual Machine on computer to run code natively
