@@ -1,34 +1,25 @@
-import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
-import mapboxgl from 'mapbox-gl';
+import { useState } from 'react';
+import MapContainer from './containers/MapContainer/MapContainer';
+import SearchContainer from './containers/SearchContainer/SearchContainer';
+import { SearchContext, defaultSearchInput } from './context/useSearchContext/useSearchContext';
+import { DEFAULT_MAX_PRICE, DEFAULT_MIN_PRICE } from './context/useSearchContext/useSearchContextConsts';
+import { ISearchInput } from './context/useSearchContext/useSearchContextTypes';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibG9yZW56b3BhcmFzIiwiYSI6ImNsMzMydWtmcDJiem4zY281a2EzcmZzZnQifQ.3ogvC2s-cq0Kqz-egooyPw';
-
-function App() {
-	const mapContainer = useRef<any>(null);
-	const map = useRef<any>(null);
-	const [lng, setLng] = useState(151.2093);
-	const [lat, setLat] = useState(-33.8688);
-	const [zoom, setZoom] = useState(9);
-
-	useEffect(() => {
-		if (map.current) return; // initialize map only once
-		map.current = new mapboxgl.Map({
-			container: mapContainer.current,
-			style: 'mapbox://styles/mapbox/dark-v10',
-			center: [lng, lat],
-			zoom: zoom
-		});
-	});
-
+const App = () => {
+	const [searchInput, setSearchInput] = useState<ISearchInput>(defaultSearchInput)
+	const searchInputValue = { searchInput, setSearchInput };
 	return (
-		<div className="App">
-			<header className="App-header">
-				<div>
-					<div ref={mapContainer} className="map-container" />
-				</div>
-			</header>
-		</div>
+		<SearchContext.Provider value={searchInputValue}>
+			<div className="App">
+				{
+					searchInput.food === '' ||
+					searchInput.maxPrice === DEFAULT_MAX_PRICE ||
+					searchInput.minPrice === DEFAULT_MIN_PRICE
+						? <SearchContainer/> 
+						: <MapContainer />
+				}
+			</div>
+		</SearchContext.Provider>
 	);
 }
 
