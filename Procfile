@@ -1,1 +1,1 @@
-web: python3 webscraper/main.py
+web: python3 webscraper/getQueryUrls.py && python3 webscraper/main.py
