@@ -45,7 +45,9 @@ def setupDriver():
         ChromeDriverManager().install(),
         desired_capabilities=caps,
         executable_path=os.environ.get('CHROMEDRIVER_PATH'),
-        chrome_options=chromeOptions
+        service=Service(executable_path=os.environ.get("CHROMEDRIVER_PATH")),
+        chrome_options=chromeOptions,
+        options=chrome_options
     )
 
     return driver
