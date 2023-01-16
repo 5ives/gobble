@@ -45,10 +45,8 @@ def setupDriver():
     driver = webdriver.Chrome(
         ChromeDriverManager().install(),
         desired_capabilities=caps,
-        executable_path=os.environ.get('CHROMEDRIVER_PATH'),
         service=Service(executable_path=os.environ.get("CHROMEDRIVER_PATH")),
-        chrome_options=chromeOptions,
-        options=chrome_options
+        options=chromeOptions
     )
 
     return driver
