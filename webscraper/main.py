@@ -1,13 +1,12 @@
 import json
 import ssl
 import time
+import os
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-
-from categoriesToQuery import categoriesToQuery
 
 '''
 Returns the URL to search for certain categories in the Uber Eats website.
@@ -30,10 +29,25 @@ automatically download the appropriate version of the ChromeDriver executable. I
 for performance logs.
 '''
 def setupDriver():
+
+    # add performance analysis capabilities
     caps = DesiredCapabilities.CHROME
     caps['goog:loggingPrefs'] = {'performance': 'ALL'}
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), desired_capabilities=caps)
+    # add ChromeDriver for selenium usage
+    chromeOptions = webdriver.ChromeOptions()
+    chromeOptions.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+    chromeOptions.add_argument('--headless')
+    chromeOptions.add_argument('--disable-dev-shm-usage')
+    chromeOptions.add_argument('--no-sandbox')
+
+    driver = webdriver.Chrome(
+        ChromeDriverManager().install(),
+        desired_capabilities=caps,
+        executable_path=os.environ.get('CHROMEDRIVER_PATH'),
+        chrome_options=chromeOptions
+    )
+
     return driver
 
 '''
