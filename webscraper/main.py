@@ -147,6 +147,7 @@ def addMenuData(restaurantData, driver):
         try:
             restaurantLink = driver.find_element(By.XPATH, '//h3[text()="' + restaurantData[i]['name'] + '"]')
         except:
+            print('Could not find', restaurantData[i]['name'])
             continue
         
         restaurantLink.click()
@@ -163,6 +164,7 @@ def addMenuData(restaurantData, driver):
             if len(menu) > 1: menu.pop(0)
             restaurantData[i]['menu'] = menu
         except:
+            print('Could not get menu data for', restaurantData[i]['name'])
             pass
         
         driver.execute_script("window.history.go(-1)")
@@ -184,14 +186,17 @@ if __name__ == "__main__":
     queryUrlsFile = open('queryUrls.json')
     queryUrls = json.load(queryUrlsFile)
 
-    for queryUrl in queryUrls:
+    for queryUrl in queryUrls[:2]:
         category = getCategory(queryUrl)
+        print('Getting data for category:', category)
+
         url = getQueryUrl(category)
         driver.get(url)
 
         try:
             routeToRestaurantsFeed(driver, location)
         except:
+            print('Could not route to feed for category:', category)
             continue
 
         feedEvents = getFeedEvents(driver)
@@ -201,6 +206,7 @@ if __name__ == "__main__":
         except:
             pass
         finally:
+            print('Finished scraping category:', category)
             writeToResultFile(restaurantData, f'{category}.json')
     
     queryUrlsFile.close()
