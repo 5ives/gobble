@@ -163,7 +163,7 @@ def addMenuData(restaurantData, driver):
                     menu.append({ 'name': spanTexts[j - 1], 'price': spanTexts[j] })
             if len(menu) > 1: menu.pop(0)
             restaurantData[i]['menu'] = menu
-            print('Got menu data for', restaurantData[i]['name'])
+            print('Got', len(menu), ' items of menu data for', restaurantData[i]['name'])
         except:
             print('Could not get menu data for', restaurantData[i]['name'])
             pass
