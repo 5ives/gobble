@@ -1,2 +1,4 @@
 webscraper/pizza-sydney-cbd.json
 webscraper/queryUrls.json
+gobble-server-key-pair.pem
+.DS_Store

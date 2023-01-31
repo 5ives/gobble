@@ -26,7 +26,6 @@ def setupDriver():
 
     # add ChromeDriver for selenium usage
     chromeOptions = webdriver.ChromeOptions()
-    chromeOptions.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
     chromeOptions.add_argument('--headless')
     chromeOptions.add_argument('--disable-dev-shm-usage')
     chromeOptions.add_argument('--no-sandbox')
@@ -42,7 +41,6 @@ def setupDriver():
     driver = webdriver.Chrome(
         ChromeDriverManager().install(),
         desired_capabilities=caps,
-        service=Service(executable_path=os.environ.get("CHROMEDRIVER_PATH")),
         options=chromeOptions
     )
 
