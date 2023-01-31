@@ -165,7 +165,8 @@ if __name__ == "__main__":
         try:
             driver = routeToRestaurantsFeed(fullQueryUrl)
             feedEvents = getFeedEvents(driver)
-        except:
+        except Exception as e:
+            print(e)
             print('Could not route to feed for category:', category)
             continue
 
