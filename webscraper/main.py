@@ -38,10 +38,13 @@ def setupDriver():
     chromeOptions.add_argument("--disable-dev-shm-usage")
     chromeOptions.add_argument('--disable-blink-features=AutomationControlled')
 
+    service = Service(executable_path=ChromeDriverManager().install())
+
     driver = webdriver.Chrome(
         ChromeDriverManager().install(),
         desired_capabilities=caps,
-        options=chromeOptions
+        options=chromeOptions,
+        service=service
     )
 
     return driver
