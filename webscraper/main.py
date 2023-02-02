@@ -162,7 +162,6 @@ if __name__ == "__main__":
     for subQueryUrl in subQueryUrls[:2]:
         
         category = getCategory(subQueryUrl)
-        category = 'ramen'
         print('Getting data for category:', category)
         fullQueryUrl = getFullQueryUrl(category)
 
