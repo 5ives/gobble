@@ -119,7 +119,7 @@ def addMenuData(restaurantData, driver, currQueryUrl):
             continue
         
         restaurantLink.click()
-        time.sleep(2)
+        time.sleep(4)
         
         try:
             spanTexts = [span.text for span in driver.find_elements(By.XPATH, '//span')]
@@ -159,24 +159,24 @@ if __name__ == "__main__":
     queryUrlsFile = open('queryUrls.json')
     subQueryUrls = getSubQueryUrls(queryUrlsFile);    
 
-    # for subQueryUrl in subQueryUrls[:2]:
+    for subQueryUrl in subQueryUrls[:2]:
         
-    # category = getCategory(subQueryUrl)
-    category = 'ramen'
-    print('Getting data for category:', category)
-    fullQueryUrl = getFullQueryUrl(category)
+        category = getCategory(subQueryUrl)
+        category = 'ramen'
+        print('Getting data for category:', category)
+        fullQueryUrl = getFullQueryUrl(category)
 
-    try:
-        driver = routeToRestaurantsFeed(fullQueryUrl)
-        feedEvents = getFeedEvents(driver)
-    except Exception as e:
-        print(e)
-        print('Could not route to feed for category:', category)
-        # continue
+        try:
+            driver = routeToRestaurantsFeed(fullQueryUrl)
+            feedEvents = getFeedEvents(driver)
+        except Exception as e:
+            print(e)
+            print('Could not route to feed for category:', category)
+            # continue
 
-    restaurantData = addMenuData(getRestaurantData(feedEvents, category), driver, fullQueryUrl)
-    print('Finished scraping category:', category)
-    writeToResultFile(restaurantData, f'{category}.json')
+        restaurantData = addMenuData(getRestaurantData(feedEvents, category), driver, fullQueryUrl)
+        print('Finished scraping category:', category)
+        writeToResultFile(restaurantData, f'{category}.json')
     
     queryUrlsFile.close()
 
