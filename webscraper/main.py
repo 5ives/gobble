@@ -172,7 +172,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             print('Could not route to feed for category:', category)
-            # continue
+            continue
 
         restaurantData = addMenuData(getRestaurantData(feedEvents, category), driver, fullQueryUrl)
         print('Finished scraping category:', category)
