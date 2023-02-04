@@ -4,6 +4,7 @@ class QueryUrlParser(Parser):
 
     def __init__(self, soup):
         Parser.__init__(self, soup)
+        self.allLinks = self.__getAllLinks()
         self.queryUrlRecords = {}
         self.queryUrls = []
 
@@ -16,21 +17,25 @@ class QueryUrlParser(Parser):
         categoryUrls = self.__getCategoryUrls()
         dishUrls = self.__getDishUrls()
         urls = categoryUrls + dishUrls
+        self.__populateQueryUrlRecords(urls)
+        self.__setQueryUrls(list(self.queryUrlRecords.keys()))
 
+    def __setQueryUrls(self, queryUrls):
+        self.QueryUrls = queryUrls
+
+    def __populateQueryUrlRecords(self, urls):
         for url in urls:
             if url not in self.queryUrlRecords:
                 self.queryUrlRecords[url] = True
-
-        self.queryUrls = list(self.queryUrlRecords.keys())
     
     def __getCategoryUrls(self):
         if not self.soup: return NameError('soup is not defined')
-
-        categories = [link.get('href') for link in self.soup.find_all('a')]
-        return list(filter(lambda category: '/au/category' in category, categories))
+        return list(filter(lambda category: '/au/category' in category, self.allLinks))
 
     def __getDishUrls(self):
         if not self.soup: return NameError('soup is not defined')
+        return list(filter(lambda dish: '/au/dish' in dish, self.allLinks))
 
-        dishes = [link.get('href') for link in self.soup.find_all('a')]
-        return list(filter(lambda dish: '/au/dish' in dish, dishes))
+    def __getAllLinks(self):
+        if not self.soup: return NameError('soup is not defined')
+        return [link.get('href') for link in self.soup.find_all('a')]
