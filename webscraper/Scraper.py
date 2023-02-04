@@ -55,7 +55,7 @@ class Scraper:
 
         # add ChromeDriver for selenium usage
         chromeOptions = webdriver.ChromeOptions()
-        # chromeOptions.add_argument('--headless')
+        chromeOptions.add_argument('--headless')
         chromeOptions.add_argument('--disable-dev-shm-usage')
         chromeOptions.add_argument('--no-sandbox')
         chromeOptions.add_argument("start-maximized")
