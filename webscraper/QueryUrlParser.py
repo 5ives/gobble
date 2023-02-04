@@ -1,3 +1,4 @@
+import os
 from Parser import Parser
 
 class QueryUrlParser(Parser):
@@ -20,8 +21,14 @@ class QueryUrlParser(Parser):
         self.__populateQueryUrlRecords(urls)
         self.__setQueryUrls(list(self.queryUrlRecords.keys()))
 
+    def toCategory(self, queryUrl: str):
+        return os.path.basename(queryUrl)
+
+    def toFullQueryUrl(self, category: str):
+        return f'https://www.ubereats.com/au/category/sydney-nsw/{category}?mod=seoEnterAddress&next=%2Fau%2Fsearch%3Fq%3D{category}&ps=1'
+
     def __setQueryUrls(self, queryUrls):
-        self.QueryUrls = queryUrls
+        self.queryUrls = queryUrls
 
     def __populateQueryUrlRecords(self, urls):
         for url in urls:
