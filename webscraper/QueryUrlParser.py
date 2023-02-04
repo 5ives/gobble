@@ -1,5 +1,6 @@
 import os
 from Parser import Parser
+from Logger import Logger
 
 class QueryUrlParser(Parser):
 
@@ -20,6 +21,7 @@ class QueryUrlParser(Parser):
         urls = categoryUrls + dishUrls
         self.__populateQueryUrlRecords(urls)
         self.__setQueryUrls(list(self.queryUrlRecords.keys()))
+        Logger.log('parsed query urls')
 
     def toCategory(self, queryUrl: str):
         return os.path.basename(queryUrl)
