@@ -3,6 +3,10 @@ import ssl
 import time
 import os
 
+from consts import CATEGORY_URL
+from QueryUrlParser import QueryUrlParser
+from Scraper import Scraper
+
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
@@ -145,7 +149,7 @@ def addMenuData(restaurantData, driver, currQueryUrl):
 def getCategory(queryUrl):
     return os.path.basename(queryUrl)
 
-def resetDriver(driver, currQueryUrl):
+def resetDriver(driver):
     driver.close()
     driver.quit()
     time.sleep(2)
@@ -156,10 +160,14 @@ def getSubQueryUrls(queryUrlsFile):
 
 if __name__ == "__main__":
 
-    queryUrlsFile = open('queryUrls.json')
-    subQueryUrls = getSubQueryUrls(queryUrlsFile);    
+    scraper = Scraper()
+    categorySoup = scraper.getSoup(CATEGORY_URL)
 
-    for subQueryUrl in subQueryUrls[:2]:
+    parser = QueryUrlParser(categorySoup)
+    parser.parseQueryUrls()
+    queryUrls = parser.getQueryUrls()
+
+    for subQueryUrl in queryUrls[:2]:
         
         category = getCategory(subQueryUrl)
         print('Getting data for category:', category)
@@ -169,15 +177,12 @@ if __name__ == "__main__":
             driver = routeToRestaurantsFeed(fullQueryUrl)
             feedEvents = getFeedEvents(driver)
         except Exception as e:
-            print(e)
-            print('Could not route to feed for category:', category)
+            print('Error: could not route to feed for category:', category)
+            print('Exception:', e)
             continue
 
         restaurantData = addMenuData(getRestaurantData(feedEvents, category), driver, fullQueryUrl)
         print('Finished scraping category:', category)
-        writeToResultFile(restaurantData, f'{category}.json')
-    
-    queryUrlsFile.close()
 
     # final restaurant structure should be:
     # { title: string, lat: number, long: number, menu: array<object> (menu) }
