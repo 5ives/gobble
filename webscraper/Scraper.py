@@ -1,3 +1,5 @@
+from abc import abstractmethod
+import json
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
@@ -12,17 +14,34 @@ class Scraper:
     def __init__(self):
         self.driver = self.__setupDriver()
 
-    def resetDriver(self):
-        if not self.driver: return NameError('driver is not defined')
-
-        self.__stopDriver()
-        sleep(2)
-        self.driver = self.__setupDriver()
+    @abstractmethod
+    def run(self):
+        pass
 
     def getSoup(self, url):
         page = requests.get(url)
         soup = BeautifulSoup(page.text, 'html.parser')
         return soup
+
+    def getPerformanceLog(self):
+        return self.driver.get_log('performance')
+
+    def getPerformanceLogEvents(self):
+        performanceLog = self.getPerformanceLog()
+        performanceLogEvents = [
+            self.__processBrowserPerformanceLogEntry(performanceLogEntry) for performanceLogEntry in performanceLog
+        ]
+        return performanceLogEvents
+
+    def resetDriver(self):
+        if not self.driver: return NameError('driver is not defined')
+        self.__stopDriver()
+        sleep(2)
+        self.driver = self.__setupDriver()
+
+    def __processBrowserPerformanceLogEntry(self, entry):
+        response = json.loads(entry['message'])['message']
+        return response
 
     def __stopDriver(self):
         self.driver.close()
@@ -36,7 +55,7 @@ class Scraper:
 
         # add ChromeDriver for selenium usage
         chromeOptions = webdriver.ChromeOptions()
-        chromeOptions.add_argument('--headless')
+        # chromeOptions.add_argument('--headless')
         chromeOptions.add_argument('--disable-dev-shm-usage')
         chromeOptions.add_argument('--no-sandbox')
         chromeOptions.add_argument("start-maximized")
