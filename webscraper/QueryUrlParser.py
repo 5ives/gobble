@@ -1,6 +1,7 @@
 import os
 from Parser import Parser
 from Logger import Logger
+from consts import FULL_CATEGORY_URL
 
 class QueryUrlParser(Parser):
 
@@ -27,7 +28,7 @@ class QueryUrlParser(Parser):
         return os.path.basename(queryUrl)
 
     def toFullQueryUrl(self, category: str):
-        return f'https://www.ubereats.com/au/category/sydney-nsw/{category}?mod=seoEnterAddress&next=%2Fau%2Fsearch%3Fq%3D{category}&ps=1'
+        return FULL_CATEGORY_URL.format(category=category)
 
     def __setQueryUrls(self, queryUrls):
         self.queryUrls = queryUrls
