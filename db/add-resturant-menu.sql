@@ -35,15 +35,15 @@ restaurant_data AS (
     RETURNING id AS restaurant_id
 )
 INSERT INTO locations (restaurant_id, lat, long)
-SELECT restaurant_data.restaurant_id,
-    data->'coordinates'->>'lat'::int,
-    data->'coordinates'->>'long'::int
+SELECT restaurant_id,
+    data->'coordinates'->>'lat'::varchar(50),
+    data->'coordinates'->>'long'::varchar(50)
 FROM data,
     restaurant_data
 INSERT INTO menu_items (restaurant_id, name, price, description)
 SELECT restaurant_data.restaurant_id,
     elem->>'name',
-    elem->>'price'::int,
+    elem->>'price'::varchar(50),
     elem->>'description'
 FROM data,
     restaurant_data,
