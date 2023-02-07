@@ -39,7 +39,7 @@ SELECT restaurant_id,
     data->'coordinates'->>'lat'::varchar(50),
     data->'coordinates'->>'long'::varchar(50)
 FROM data,
-    restaurant_data
+    restaurant_data;
 INSERT INTO menu_items (restaurant_id, name, price, description)
 SELECT restaurant_data.restaurant_id,
     elem->>'name',
