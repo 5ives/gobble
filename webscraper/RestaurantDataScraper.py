@@ -136,7 +136,7 @@ class RestaurantDataScraper(Scraper):
         menuData = []
         for j in range(0, len(spanTexts)):
             if spanTexts[j].startswith('$'):
-                menuData.append({ 'name': spanTexts[j - 1], 'price': spanTexts[j] })
+                menuData.append({ 'name': spanTexts[j - 1], 'price': spanTexts[j], 'description': '' })
         if len(menuData) > 1: menuData.pop(0)
         return menuData
 
