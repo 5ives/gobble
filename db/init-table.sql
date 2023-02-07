@@ -9,14 +9,14 @@ DROP TABLE IF EXISTS restaurants;
 -- # [ { name: string, price: number, description: string } ]
 
 CREATE TABLE restaurants (
-    id              int serial NOT NULL,
+    id              SERIAL NOT NULL,
     name            varchar(256) NOT NULL,                  -- data.name
     category        varchar(128) NOT NULL,                  -- data.category
     PRIMARY KEY (id)
 );
 
 CREATE TABLE locations (
-    id              int serial NOT NULL,
+    id              SERIAL NOT NULL,
     restaurant_id   int NOT NULL REFERENCES restaurants,
     lat             varchar(50) NOT NULL,                   -- data.coordinates.lat
     long            varchar(50) NOT NULL,                   -- data.coordinates.long
@@ -27,7 +27,7 @@ CREATE TABLE locations (
 );
 
 CREATE TABLE menu_items (
-    id              int serial NOT NULL,
+    id              SERIAL NOT NULL,
     restaurant_id   int NOT NULL,
     name            varchar(128) NOT NULL,                  -- data.menu[i].name
     price           varchar(50) NOT NULL,                   -- data.menu[i].price
