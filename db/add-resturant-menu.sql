@@ -1,50 +1,37 @@
-WITH data AS (
-    SELECT '[
-    {
-        "name": "The Bavarian (World Square)",
-        "category": "pretzel",
-        "coordinates": {
-            "lat": -33.8773,
-            "long": 151.2068
-        },
-        "menu": [
-            {
-                "name": "Your All-Time Favourite Parmi",
-                "price": "$30.00",
-                "description": ""
-            },
-            {
-                "name": "Jager (aka Hunter) Chicken Schnitzel",
-                "price": "$30.00",
-                "description": ""
-            },
-            {
-                "name": "Naked Schnitzel",
-                "price": "$30.00",
-                "description": ""
-            }
-        ]
-    }
-]'::jsonb AS data
+
+-- parse JSON into var
+WITH data (json_value) AS (
+    values ({json_input}::jsonb)
 ),
-restaurant_data AS (
+
+-- parse restaurant menu items data into var
+menu AS (select jsonb_array_elements(json_value->'menu') as menu_item from data),
+
+-- insert restaurant data
+restaurant_data_from_restaurants AS (
     INSERT INTO restaurants (name, category)
-    SELECT data->>'name',
-        data->>'category'
-    FROM data
-    RETURNING id AS restaurant_id
+    SELECT d.json_value->>'name',
+        d.json_value->>'category'
+    FROM data d
+    RETURNING id
+),
+
+-- insert restaurant location data
+restaurant_data_from_locations AS (
+    INSERT INTO locations (restaurant_id, lat, long)
+    SELECT restaurant_data_from_restaurants.id,
+        d.json_value->'coordinates'->>'lat'::varchar(50),
+        d.json_value->'coordinates'->>'long'::varchar(50)
+    FROM data d,
+        restaurant_data_from_restaurants
+    RETURNING restaurant_id
 )
-INSERT INTO locations (restaurant_id, lat, long)
-SELECT restaurant_id,
-    data->'coordinates'->>'lat'::varchar(50),
-    data->'coordinates'->>'long'::varchar(50)
-FROM data,
-    restaurant_data;
+
+-- insert restaurant menu items data
 INSERT INTO menu_items (restaurant_id, name, price, description)
-SELECT restaurant_data.restaurant_id,
-    elem->>'name',
-    elem->>'price'::varchar(50),
-    elem->>'description'
-FROM data,
-    restaurant_data,
-    jsonb_array_elements(data->'menu') elem;
+SELECT restaurant_data_from_locations.restaurant_id,
+    menu_item->>'name',
+    menu_item->>'price'::varchar(50),
+    menu_item->>'description'
+FROM restaurant_data_from_locations,
+    menu;
