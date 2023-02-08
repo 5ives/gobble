@@ -20,7 +20,7 @@ CREATE TABLE locations (
     restaurant_id   int NOT NULL REFERENCES restaurants,
     lat             varchar(50) NOT NULL,                   -- data.coordinates.lat
     long            varchar(50) NOT NULL,                   -- data.coordinates.long
-    PRIMARY KEY (id),           
+    PRIMARY KEY (lat, long),           
     CONSTRAINT fk_restaurant
       FOREIGN KEY(restaurant_id) 
 	      REFERENCES restaurants(id)
