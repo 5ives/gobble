@@ -24,9 +24,3 @@ if __name__ == "__main__":
         restaurantDataScraper.setCategory(category)
         restaurantDataScraper.run()
         Logger.log(f'Finished scraping category: {category}')
-
-    # final restaurant structure should be:
-    # { title: string, lat: number, long: number, menu: array<object> (menu) }
-
-    # final menu structure should be:
-    # [ { name: string, price: number, description: string } ]
