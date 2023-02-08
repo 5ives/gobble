@@ -4,6 +4,7 @@ from Scraper import Scraper
 from consts import LOCATION
 from Logger import Logger
 from selenium.webdriver.common.by import By
+from Repository import Repository
 
 class RestaurantDataScraper(Scraper):
 
@@ -14,6 +15,7 @@ class RestaurantDataScraper(Scraper):
         self.feedEvents = []
         self.location = LOCATION
         self.restaurantsData = []
+        self.repository = Repository()
 
     def getRestaurantsData(self):
         return self.restaurantsData
@@ -78,6 +80,7 @@ class RestaurantDataScraper(Scraper):
             restaurantData = self.__getRestaurantData(feedEventBody)
             restaurantsData = [*restaurantsData, *restaurantData]
             
+        Logger.log(f'Found {len(restaurantsData)} restaurants')
         self.__setRestaurantsData(restaurantsData)
 
     def __getFeedEventBody(self, feedEvent):
@@ -110,16 +113,30 @@ class RestaurantDataScraper(Scraper):
             try:
                 spanTexts = self.__getSpanTexts()
                 menuData = self.__getMenuData(spanTexts)
+                if len(menuData) < 2: raise Exception('invalid menu data')
                 self.restaurantsData[i]['menu'] = menuData
-                Logger.log(f'Got {len(menuData)} items of menu data for {self.restaurantsData[i]["name"]}')
+                Logger.log(f'Scraped {len(menuData)} items of menu data for {self.restaurantsData[i]["name"]}')
             except Exception as exception:
                 Logger.log(f'Could not get menu data for {self.restaurantsData[i]["name"]}')
                 Logger.log(f'Exception: {exception}')
+                self.__resetDriverAndRouteToRestaurantsFeed()
                 continue
 
-            self.resetDriver()
-            self.__routeToRestaurantsFeed()
-            sleep(2)
+            try:
+                self.repository.insertRestaurant(self.restaurantsData[i])
+                Logger.log(f'Inserted {self.restaurantsData[i]["name"]} in the database')
+            except Exception as exception:
+                Logger.log(f'{self.restaurantsData[i]["name"]} is already in the database')
+                Logger.log(f'Exception: {exception}')
+                self.__resetDriverAndRouteToRestaurantsFeed()
+                continue
+
+            self.__resetDriverAndRouteToRestaurantsFeed()
+
+    def __resetDriverAndRouteToRestaurantsFeed(self):
+        self.resetDriver()
+        self.__routeToRestaurantsFeed()
+        sleep(2)
 
     def __clickRestaurant(self, restuarantName):
         try:
