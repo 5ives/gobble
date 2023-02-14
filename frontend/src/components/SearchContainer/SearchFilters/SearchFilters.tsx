@@ -1,8 +1,9 @@
-import { ISearchInput } from "../../context/useSearchContext/useSearchContextTypes";
-import SearchDropdown from "../SearchDropdown/SearchDropdown";
-import SearchNumberInput from "../SearchNumberInput/SearchNumberInput";
+import { ISearchInput } from "../../../context/useSearchContext/useSearchContextTypes";
+import SearchCuisines from "../SearchCuisines/SearchCuisines";
 import { SearchFiltersWrapper } from "./SearchFiltersStyles";
 import { SearchFiltersProps } from "./SearchFiltersTypes";
+import { Divider } from '@mantine/core';
+import SearchPrice from "../SearchPrice/SearchPrice";
 
 const SearchFilters = ({ food, minPrice, maxPrice, setSearchInput } : SearchFiltersProps) => {
 
@@ -22,9 +23,9 @@ const SearchFilters = ({ food, minPrice, maxPrice, setSearchInput } : SearchFilt
 
     return (
         <SearchFiltersWrapper>
-            <SearchDropdown food={food} setFood={handleSetFood}/>
-            <SearchNumberInput input={minPrice} setInput={handleSetMinPrice} label='Min Price'/>
-            <SearchNumberInput input={maxPrice} setInput={handleSetMaxPrice} label='Max Price'/>
+            <SearchCuisines/>
+            <Divider my="sm"/>
+            <SearchPrice/>
         </SearchFiltersWrapper>
     );
 };
