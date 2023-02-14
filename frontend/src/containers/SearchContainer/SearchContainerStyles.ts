@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { COLORS } from "../../consts/colors";
 
 export const SearchContainerWrapper = styled('div')`
     width: 100vw;
@@ -8,5 +7,4 @@ export const SearchContainerWrapper = styled('div')`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${COLORS.APPLE_GREEN};
 `;

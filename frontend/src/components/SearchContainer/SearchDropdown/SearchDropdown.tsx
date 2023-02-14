@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from "react-bootstrap"
-import { TOP_TEN_FOODS } from "../../consts/foods";
+import { TOP_TEN_FOODS } from "../../../consts/foods";
 import { ScrollDropdownMenu } from './SearchDropdownStyles';
 
 const SearchDropdown = ({ food, setFood }: { food: string, setFood: Function }) => {
