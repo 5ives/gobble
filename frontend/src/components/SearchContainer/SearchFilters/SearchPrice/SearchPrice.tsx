@@ -1,4 +1,4 @@
-import Heading from "../../common/Heading/Heading";
+import Heading from "../../../common/Heading/Heading";
 import SearchPriceSlider from "./SearchPriceSlider/SearchPriceSlider";
 
 const SearchPrice = () => {
