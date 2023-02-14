@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from "react-bootstrap"
-import { TOP_TEN_FOODS } from "../../../consts/foods";
+import { CUISINES } from "../../../consts/cuisines";
 import { ScrollDropdownMenu } from './SearchDropdownStyles';
 
 const SearchDropdown = ({ food, setFood }: { food: string, setFood: Function }) => {
@@ -11,7 +11,7 @@ const SearchDropdown = ({ food, setFood }: { food: string, setFood: Function }) 
             </Dropdown.Toggle>
             <ScrollDropdownMenu>
                 {
-                    TOP_TEN_FOODS.map(food => <Dropdown.Item onClick={ () => setFood(food) }>{food}</Dropdown.Item>)
+                    CUISINES.map(cuisine => <Dropdown.Item onClick={ () => setFood(cuisine) }>{cuisine}</Dropdown.Item>)
                 }
             </ScrollDropdownMenu>
         </Dropdown>
