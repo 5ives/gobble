@@ -1,4 +1,4 @@
-import { CUISINES } from "../../../../consts/cuisines";
+import { CUISINES } from "../../../../../consts/cuisines";
 import SearchCuisineBadge from "../SearchCuisinesBadge/SearchCuisinesBadge";
 import { SearchCuisineBadgesWrapper } from "./SearchCuisinesBadgesStyles";
 

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { MARGIN } from "../../../../consts/spacing";
+import { MARGIN } from "../../../../../consts/spacing";
 
 export const SearchCuisinesInputWrapper = styled('div')`
     margin: ${MARGIN.SMALL} 0;

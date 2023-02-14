@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { CUISINE_BADGES_HEIGHT } from "../../../../consts/component-styles";
-import { MARGIN } from "../../../../consts/spacing";
+import { CUISINE_BADGES_HEIGHT } from "../../../../../consts/component-styles";
+import { MARGIN } from "../../../../../consts/spacing";
 
 export const SearchCuisineBadgesWrapper = styled('div')`
     height: ${CUISINE_BADGES_HEIGHT};
