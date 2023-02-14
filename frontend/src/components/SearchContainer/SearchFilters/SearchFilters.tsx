@@ -3,7 +3,7 @@ import SearchCuisines from "./SearchCuisines/SearchCuisines";
 import { SearchFiltersWrapper } from "./SearchFiltersStyles";
 import { SearchFiltersProps } from "./SearchFiltersTypes";
 import { Divider } from '@mantine/core';
-import SearchPrice from "../SearchPrice/SearchPrice";
+import SearchPrice from "./SearchPrice/SearchPrice";
 
 const SearchFilters = ({ food, minPrice, maxPrice, setSearchInput } : SearchFiltersProps) => {
 
