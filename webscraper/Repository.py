@@ -24,6 +24,16 @@ class Repository:
     
         self.connection.commit()
 
+    def hasRestaurant(self, lat, long):
+        try:
+            self.cursor.execute(f"SELECT count(*) FROM locations WHERE lat = '{lat}' AND long = '{long}'")
+            count = self.cursor.fetchone()[0]
+        except Exception as error:
+            self.connection.rollback()
+            raise error
+
+        return True if count > 0 else False
+
     def __cleanupData(self, data):
         return ('\'' + json.dumps(data).replace("'", "''") + '\'')
 
