@@ -109,25 +109,32 @@ class RestaurantDataScraper(Scraper):
 
         for i in range(0, len(self.restaurantsData)):
 
-            self.__clickRestaurant(self.restaurantsData[i]['name'])
+            currRestaurantName = self.restaurantsData[i]['name']
+            currRestaurantLatitude = self.restaurantsData[i]['coordinates']['lat']
+            currRestaurantLongitude = self.restaurantsData[i]['coordinates']['long']
+            if self.repository.hasRestaurant(currRestaurantLatitude, currRestaurantLongitude):
+                Logger.log(f'{currRestaurantName} is already in the database')
+                continue 
+
+            self.__clickRestaurant(currRestaurantName)
             
             try:
                 spanTexts = self.__getSpanTexts()
                 menuData = self.__getMenuData(spanTexts)
                 if len(menuData) < 2: raise Exception('invalid menu data')
                 self.restaurantsData[i]['menu'] = menuData
-                Logger.log(f'Scraped {len(menuData)} items of menu data for {self.restaurantsData[i]["name"]}')
+                Logger.log(f'Scraped {len(menuData)} items of menu data for {currRestaurantName}')
             except Exception as exception:
-                Logger.log(f'Could not get menu data for {self.restaurantsData[i]["name"]}')
+                Logger.log(f'Could not get menu data for {currRestaurantName}')
                 Logger.log(f'Exception: {exception}')
                 self.__resetDriverAndRouteToRestaurantsFeed()
                 continue
 
             try:
                 self.repository.insertRestaurant(self.restaurantsData[i])
-                Logger.log(f'Inserted {self.restaurantsData[i]["name"]} in the database')
+                Logger.log(f'Inserted {currRestaurantName} in the database')
             except Exception as exception:
-                Logger.log(f'{self.restaurantsData[i]["name"]} is already in the database')
+                Logger.log(f'{currRestaurantName} is already in the database')
                 Logger.log(f'Exception: {exception}')
                 self.__resetDriverAndRouteToRestaurantsFeed()
                 continue
