@@ -19,7 +19,6 @@ class Repository:
         try:
             self.cursor.execute(open(insertRestaurantFilePath, "r").read().format(json_input=restaurantData))
         except Exception as error:
-            Logger.log(error)
             self.connection.rollback()
             raise error
     
