@@ -31,6 +31,7 @@ class RestaurantDataScraper(Scraper):
         self.__populateFeedEvents()
         self.__populateRestaurantsData()
         self.__addMenuDataToRestaurantsData()
+        self.resetDriver()
 
     def __setFeedEvents(self, feedEvents):
         self.feedEvents = feedEvents
