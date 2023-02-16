@@ -5,6 +5,7 @@ import os
 from consts import INSERT_RESTAURANT_FILENAME
 from sqlite3 import OperationalError
 from Logger import Logger
+from re import sub
 
 class Repository:
 
@@ -35,7 +36,8 @@ class Repository:
         return True if count > 0 else False
 
     def __cleanupData(self, data):
-        return ('\'' + json.dumps(data).replace("'", "''") + '\'')
+        for menu_item in data['menu']: menu_item['price'] = sub(r'[^\d.]', '', menu_item['price']) # remove dollar signs
+        return ('\'' + json.dumps(data).replace("'", "''") + '\'') # remove invalid apostrophes from restaurant names
 
     def __getInsertRestaurantFilePath(self):
         return os.path.join(os.path.dirname(__file__), f'../db/{INSERT_RESTAURANT_FILENAME}')
