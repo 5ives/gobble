@@ -20,8 +20,8 @@ restaurant_data_from_restaurants AS (
 restaurant_data_from_locations AS (
     INSERT INTO locations (restaurant_id, lat, long)
     SELECT restaurant_data_from_restaurants.id,
-        d.json_value->'coordinates'->>'lat'::varchar(50),
-        d.json_value->'coordinates'->>'long'::varchar(50)
+        d.json_value->'coordinates'->>'lat'::DECIMAL,
+        d.json_value->'coordinates'->>'long'::DECIMAL
     FROM data d,
         restaurant_data_from_restaurants
     RETURNING restaurant_id
@@ -31,7 +31,7 @@ restaurant_data_from_locations AS (
 INSERT INTO menu_items (restaurant_id, name, price, description)
 SELECT restaurant_data_from_locations.restaurant_id,
     menu_item->>'name',
-    menu_item->>'price'::varchar(50),
+    menu_item->>'price'::DECIMAL,
     menu_item->>'description'
 FROM restaurant_data_from_locations,
     menu;
