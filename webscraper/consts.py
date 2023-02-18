@@ -9,3 +9,5 @@ CATEGORY_URL = 'https://www.ubereats.com/au/category/sydney-nsw'
 LOCATION = 'Pitt Street Mall'
 
 INSERT_RESTAURANT_FILENAME = 'insert-restaurant.sql'
+
+SEARCH_RESTAURANTS_FILENAME = 'search-restaurant.sql'
