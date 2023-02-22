@@ -6,7 +6,7 @@ import { SearchContainerBox, SearchContainerWrapper } from "./SearchContainerSty
 import SearchButton from "../../components/SearchContainer/SearchButton/SearchButton";
 
 const SearchContainer = () => {
-    const { searchInput, setSearchInput } = useContext<ISearchContext>(SearchContext)
+    const { searchInput, setSearchInput } = useContext<ISearchContext>(SearchContext);
     return (
         <SearchContainerWrapper>
             <SearchContainerBox>
