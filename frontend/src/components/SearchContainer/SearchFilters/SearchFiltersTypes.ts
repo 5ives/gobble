@@ -1,6 +1,6 @@
 
 export type SearchFiltersProps = {
-    food: string,
+    cuisine: string,
     minPrice: number,
     maxPrice: number,
     setSearchInput: Function

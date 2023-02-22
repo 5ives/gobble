@@ -1,8 +1,9 @@
 
 export type ISearchInput = {
-    food: string;
+    cuisine: string;
     minPrice: number;
     maxPrice: number;
+    isSubmitted: boolean;
 };
 
 export type ISearchContext = {
