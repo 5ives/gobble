@@ -1,9 +1,11 @@
 import { Input } from "@mantine/core";
 import { SearchCuisinesInputWrapper } from "./SearchCuisinesInputStyles";
 
-const SearchCuisinesInput = () => {
+const SearchCuisinesInput = ({ value } : { value : string }) => {
     return (
-        <SearchCuisinesInputWrapper><Input placeholder="Search a cuisine"/></SearchCuisinesInputWrapper>
+        <SearchCuisinesInputWrapper>
+            <Input placeholder="Search a cuisine" readOnly value={value}/>
+        </SearchCuisinesInputWrapper>
     );
 };
 
