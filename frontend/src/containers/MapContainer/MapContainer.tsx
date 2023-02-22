@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ // remove once setters are being used
-
 import { useEffect, useState, useRef, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 
-import { LOCATIONS, DEFAULT_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../../consts/locations';
+import { DEFAULT_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../../consts/locations';
 import { MAP_STYLES } from '../../consts/map-styles';
 
 import { MapContainerWrapper } from './MapContainerStyles';
@@ -20,51 +18,26 @@ const MapContainer = () => {
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
+        initMap();
+        setupMapOnLoad();
+        flyToUserLocation();
+    });
 
-        // initialise map
-        map.current = new mapboxgl.Map({
+    const initMap = () => {
+        map.current =  new mapboxgl.Map({
             container: mapContainer.current,
             style: MAP_STYLES.DARK,
             center: [currLocation.long, currLocation.lat],
             zoom: DEFAULT_ZOOM
         });
+    };
 
-        // fly to user's location on load
-        if (!navigator.geolocation) return;
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCurrLocation({ long: position.coords.longitude, lat: position.coords.latitude })
-            map.current?.flyTo({ center: [position.coords.longitude, position.coords.latitude], zoom: 16 });
-        });
-
-        let features: any[] = [];
-        RESTAURANTS.forEach(restaurant => {
-            console.log(searchInput);
-            if (restaurant.menu.some(item => item.price >= searchInput.minPrice && item.price <= searchInput.maxPrice)) {
-                features.push({
-                    type: 'Feature',
-                    properties: {
-                        description: restaurant.name
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [ restaurant.coordinates.lat, restaurant.coordinates.long ]
-                    }
-                });
-            }
-        });
-
-        console.log(features);
-
-        map.current.on('load', () => {
+    const setupMapOnLoad = () => {
+        map.current?.on('load', () => {
             map.current?.addSource('places', {
                 'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': features
-                },
+                'data': { 'type': 'FeatureCollection', 'features': getMapFeatures() },
             });
-    
-            // Add a layer showing the places.
             map.current?.addLayer({
                 'id': 'places',
                 'type': 'circle',
@@ -78,28 +51,36 @@ const MapContainer = () => {
             });
         });
 
-        map.current.on('flyTo', () => {
-            map.current?.addSource('places', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': [
-                        {
-                            'type': 'Feature',
-                            'properties': {
-                                'description': 'The place'
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [currLocation.long, currLocation.lat]
-                            }
-                        }
-                    ]
-                },
-            });
+        return map;
+    };
+
+    // TODO: use database to get restaurants instead
+    const getMapFeatures = () => {
+        let features: any[] = [];
+        RESTAURANTS.forEach(restaurant => {
+            if (restaurant.menu.some(item => item.price >= searchInput.minPrice && item.price <= searchInput.maxPrice)) {
+                features.push({
+                    type: 'Feature',
+                    properties: {
+                        description: restaurant.name
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [ restaurant.coordinates.lat, restaurant.coordinates.long ]
+                    }
+                });
+            }
         });
-        
-    });
+        return features;
+    };
+
+    const flyToUserLocation = async () => {
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(position => {
+            setCurrLocation({ long: position.coords.longitude, lat: position.coords.latitude })
+            map.current?.flyTo({ center: [position.coords.longitude, position.coords.latitude], zoom: 16 });
+        });
+    };
 
     return (
         <div>
