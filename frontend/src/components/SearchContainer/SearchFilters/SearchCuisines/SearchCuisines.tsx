@@ -9,7 +9,8 @@ const SearchCuisines = () => {
     const { searchInput, setSearchInput } = useContext<ISearchContext>(SearchContext);
 
     const handleCuisineChange = (newCuisine : string) => {
-        setSearchInput((searchInput : ISearchInput) => ({ ...searchInput, cuisine: newCuisine }))
+        const lowercasedCuisine = newCuisine.toLowerCase();
+        setSearchInput((searchInput : ISearchInput) => ({ ...searchInput, cuisine: lowercasedCuisine }))
     };
 
     return (
