@@ -5,8 +5,9 @@ import { DEFAULT_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../../consts/
 import { MAP_STYLES } from '../../consts/map-styles';
 
 import { MapContainerWrapper } from './MapContainerStyles';
-import { SearchContext } from '../../context/useSearchContext/useSearchContext';
-import { RESTAURANTS } from '../../consts/restaurants';
+import { IRestaurantContext } from '../../context/useRestaurantContext/useRestaurantContextTypes';
+import { RestaurantContext } from '../../context/useRestaurantContext/useRestaurantContext';
+import { Restaurant } from '../../types/restaurant.type';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN || '';
 
@@ -14,7 +15,7 @@ const MapContainer = () => {
     const [currLocation, setCurrLocation] = useState({ long: DEFAULT_LONGITUDE, lat: DEFAULT_LATITUDE });
     const mapContainer = useRef<any>(null);
 	const map = useRef<mapboxgl.Map | null>(null);
-    const { searchInput } = useContext(SearchContext);
+    const { restaurants } = useContext<IRestaurantContext>(RestaurantContext);
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
@@ -54,23 +55,15 @@ const MapContainer = () => {
         return map;
     };
 
-    // TODO: use database to get restaurants instead
     const getMapFeatures = () => {
         let features: any[] = [];
-        RESTAURANTS.forEach(restaurant => {
-            if (restaurant.menu.some(item => item.price >= searchInput.minPrice && item.price <= searchInput.maxPrice)) {
-                features.push({
-                    type: 'Feature',
-                    properties: {
-                        description: restaurant.name
-                    },
-                    geometry: {
-                        type: 'Point',
-                        coordinates: [ restaurant.coordinates.lat, restaurant.coordinates.long ]
-                    }
-                });
-            }
-        });
+        restaurants.forEach((restaurant: Restaurant) => {
+            features.push({
+                type: 'Feature',
+                properties: { description: restaurant.name },
+                geometry: { type: 'Point', coordinates: [ restaurant.long, restaurant.lat ] }
+            });
+        })
         return features;
     };
 
