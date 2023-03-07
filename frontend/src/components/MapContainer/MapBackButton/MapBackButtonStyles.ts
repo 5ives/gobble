@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { BORDER_RADIUS, HEIGHT, MARGIN, WIDTH } from "../../../consts/spacing";
+import { BORDER_RADIUS, HEIGHT, WIDTH } from "../../../consts/spacing";
 
 export const BackButtonWrapper = styled('div')`
     position: fixed;
