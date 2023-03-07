@@ -191,7 +191,6 @@ export const CUISINES = [
   "Wrap",
   "Yakiniku",
   "Yakitori",
-  "Sydney nsw?mod=selectlanguage&ps=1",
   "Fettuccine alfredo",
   "Sopes",
   "Roast beef bowl",
