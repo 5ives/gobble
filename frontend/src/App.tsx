@@ -7,6 +7,8 @@ import { ISearchInput } from './context/useSearchContext/useSearchContextTypes';
 import { Restaurant } from './types/restaurant.type';
 
 import { RestaurantContext } from './context/useRestaurantContext/useRestaurantContext';
+import { DEFAULT_ROUTE } from './context/useRouteContext/useRouteContextConsts';
+import { RouteContext } from './context/useRouteContext/useRouteContext';
 
 const App = () => {
 
@@ -16,12 +18,21 @@ const App = () => {
 	const [restaurants, setRestaurants] = useState<Restaurant[]>(DEFAULT_RESTAURANTS);
 	const restaurantsValue = { restaurants, setRestaurants };
 
+	const [route, setRoute] = useState<string>(DEFAULT_ROUTE);
+	const routeValue = { route, setRoute };
+
 	return (
 		<SearchContext.Provider value={searchInputValue}>
 			<RestaurantContext.Provider value={restaurantsValue}>
-				<div className="App">
-					{ searchInput.isSubmitted ? <MapContainer /> : <SearchContainer /> }
-				</div>
+				<RouteContext.Provider value={routeValue}>
+					<div className="App">
+						{ 
+							route === '/' ? <SearchContainer />
+							: route === '/map' ? <MapContainer />
+							: <></>
+						}
+					</div>
+				</RouteContext.Provider>
 			</RestaurantContext.Provider>
 		</SearchContext.Provider>
 	);
