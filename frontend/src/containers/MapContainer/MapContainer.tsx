@@ -11,6 +11,7 @@ import { RestaurantContext } from '../../context/useRestaurantContext/useRestaur
 import { Restaurant } from '../../types/restaurant.type';
 import reactElementToString from '../../utils/reactElementToString';
 import MapNode from '../../components/MapContainer/MapNode/MapNode';
+import MapBackButton from '../../components/MapContainer/MapBackButton/MapBackButton';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN || '';
 
@@ -124,6 +125,7 @@ const MapContainer = () => {
     return (
         <div>
             <MapContainerWrapper ref={mapContainer}/>
+            <MapBackButton/>
         </div>
     )
 };
