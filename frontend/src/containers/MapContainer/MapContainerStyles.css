@@ -1,0 +1,10 @@
+
+.restaurant-popup.mapboxgl-popup {
+    max-width: fit-content !important; /* centres popup tip */
+}
+
+.restaurant-popup .mapboxgl-popup-content {
+    width: 420px;
+    max-height: 336px;
+    overflow-y: auto;
+}

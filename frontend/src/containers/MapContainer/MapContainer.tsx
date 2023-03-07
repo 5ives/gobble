@@ -3,11 +3,14 @@ import mapboxgl from 'mapbox-gl';
 
 import { DEFAULT_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE } from '../../consts/locations';
 import { MAP_STYLES } from '../../consts/map-styles';
+import "./MapContainerStyles.css";
 
 import { MapContainerWrapper } from './MapContainerStyles';
 import { IRestaurantContext } from '../../context/useRestaurantContext/useRestaurantContextTypes';
 import { RestaurantContext } from '../../context/useRestaurantContext/useRestaurantContext';
 import { Restaurant } from '../../types/restaurant.type';
+import reactElementToString from '../../utils/reactElementToString';
+import MapNode from '../../components/MapContainer/MapNode/MapNode';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN || '';
 
@@ -60,7 +63,7 @@ const MapContainer = () => {
 
             // Copy coordinates array.
             const coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.description;
+            const html = e.features[0].properties.html;
             
             // Ensure that if the map is zoomed out such that multiple
             // copies of the feature are visible, the popup appears
@@ -71,9 +74,9 @@ const MapContainer = () => {
 
             if (!map || !map.current) return;
             
-            new mapboxgl.Popup()
+            new mapboxgl.Popup({ className: 'restaurant-popup' })
                 .setLngLat(coordinates)
-                .setHTML(description)
+                .setHTML(html)
                 .addTo(map.current);
         });
         
@@ -97,7 +100,13 @@ const MapContainer = () => {
         restaurants.forEach((restaurant: Restaurant) => {
             features.push({
                 type: 'Feature',
-                properties: { description: `<strong>${restaurant.name}<strong/></br><p>${restaurant.menuItems[0].name}: $${restaurant.menuItems[0].price}` },
+                properties: { html: reactElementToString(
+                    <MapNode
+                        restaurantName={ restaurant.name }
+                        menuItemName={ restaurant.menuItems[0].name }
+                        menuItemPrice={ restaurant.menuItems[0].price }
+                    />
+                )},
                 geometry: { type: 'Point', coordinates: [ restaurant.long, restaurant.lat ] }
             });
         })
@@ -117,6 +126,6 @@ const MapContainer = () => {
             <MapContainerWrapper ref={mapContainer}/>
         </div>
     )
-}
+};
 
 export default MapContainer;
