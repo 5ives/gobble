@@ -16,7 +16,7 @@ app.use(cors({ origin: ['http://localhost:3000'] } as cors.CorsOptions));
 app.use('/api/v1', restaurantRouter);
 
 // middleware for error handling
-app.use((err: any, res: Response) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const statusCode = err.statusCode || 500;
     console.error(err.message, err.stack);
     res.status(statusCode).json({ 'message': err.message });
