@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as cors from 'cors';
   
 const app = express();
-const port : Number = 80;
+const port : Number = 8080;
   
 app.get('/', (_req: Request, res: Response) => {
     res.send('Welcome to the gobble backend!');
