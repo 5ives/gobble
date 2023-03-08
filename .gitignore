@@ -1,6 +1,6 @@
-*.json
 *.pem
 .DS_Store
+.vscode
 
 # ignored backend dirs/files
 backend/node_modules/
