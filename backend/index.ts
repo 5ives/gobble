@@ -12,7 +12,7 @@ app.get('/', (req: Request, res: Response) => {
   
 app.listen(port,() => console.log('The application is listening on port http://localhost:' + port));
 
-app.use(cors({ origin: ['http://localhost:3000'] } as cors.CorsOptions));
+app.use(cors({ origin: ['http://localhost:3000, /.*gobble-beta.netlify.app/'] } as cors.CorsOptions));
 app.use('/api/v1', restaurantRouter);
 
 // middleware for error handling
