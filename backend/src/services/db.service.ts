@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import config from "../configs/db.config";
+import config from "../configs/ebdb.config";
 
 export const query = async (sql : string) => {
     const client = new Client(config);
