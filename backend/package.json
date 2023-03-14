@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "The backend of the gobble project.",
   "main": "index.js",
+  "engines": { "node" : ">=16 <17" },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
