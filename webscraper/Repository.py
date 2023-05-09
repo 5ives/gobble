@@ -105,11 +105,11 @@ class Repository:
     def __getConnection(self):
         try:
             conn = psycopg2.connect("""
-                host=awseb-e-gfpvj8sjpz-stack-awsebrdsdatabase-ecyagf4zksvs.c8xnamihzakf.ap-southeast-2.rds.amazonaws.com
-                port=5432
-                user=lorenzoparas
-                password=9kcC8bYo7AfO4zyEtSiv
-                dbname=ebdb
+                host=host
+                port=port
+                user=user
+                password=password
+                dbname=dbname
             """)
         except OperationalError as error:
             Logger.log(error)
