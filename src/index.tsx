@@ -9,6 +9,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import { Amplify } from 'aws-amplify';
+import config from './aws-exports';
+
+Amplify.configure(config);
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
