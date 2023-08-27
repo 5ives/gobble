@@ -5,8 +5,6 @@ from bs4 import BeautifulSoup
 from time import sleep
 
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 
 class Scraper:
@@ -49,13 +47,10 @@ class Scraper:
 
     def __setupDriver(self):
 
-        # add performance analysis capabilities
-        caps = DesiredCapabilities.CHROME
-        caps['goog:loggingPrefs'] = {'performance': 'ALL'}
-
         # add ChromeDriver for selenium usage
         chromeOptions = webdriver.ChromeOptions()
-        chromeOptions.add_argument('--headless')
+        chromeOptions.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
+        # chromeOptions.add_argument('--headless')
         chromeOptions.add_argument('--disable-dev-shm-usage')
         chromeOptions.add_argument('--no-sandbox')
         chromeOptions.add_argument("start-maximized")
@@ -68,10 +63,8 @@ class Scraper:
         chromeOptions.add_argument('--disable-blink-features=AutomationControlled')
 
         driver = webdriver.Chrome(
-            ChromeDriverManager().install(),
-            desired_capabilities=caps,
             options=chromeOptions,
-            service=Service(executable_path=ChromeDriverManager().install())
+            service=Service()
         )
 
         return driver
