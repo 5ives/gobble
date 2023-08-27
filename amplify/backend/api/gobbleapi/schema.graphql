@@ -7,10 +7,23 @@ type Restaurant @model {
   name: String!
   lat: Float!
   long: Float!
-  menuItems: [MenuItem]!
+  menuItems: [MenuItem] @hasMany
 }
 
 type MenuItem @model {
+  id: ID!
   name: String!
   price: Float!
+  restaurant: Restaurant @belongsTo
+}
+
+input CreateMenuItemInput {
+  id: ID
+  name: String!
+  price: Float!
+  restaurantMenuItemsId: ID
+}
+
+type Mutation {
+  batchAddMenuItems(menuItems: [CreateMenuItemInput]): [MenuItem]
 }
