@@ -26,18 +26,18 @@ class RestaurantDataScraper(Scraper):
     def setCategory(self, category):
         self.category = category
 
+    def __setFeedEvents(self, feedEvents):
+        self.feedEvents = feedEvents
+
+    def __setRestaurantsData(self, restaurantsData):
+        self.restaurantsData = restaurantsData
+
     def run(self):
         self.__routeToRestaurantsFeed()
         self.__populateFeedEvents()
         self.__populateRestaurantsData()
         self.__addMenuDataToRestaurantsData()
         self.resetDriver()
-
-    def __setFeedEvents(self, feedEvents):
-        self.feedEvents = feedEvents
-
-    def __setRestaurantsData(self, restaurantsData):
-        self.restaurantsData = restaurantsData
 
     def __routeToRestaurantsFeed(self):
         if not self.queryUrl: return NameError('queryUrl is not defined')
@@ -93,8 +93,11 @@ class RestaurantDataScraper(Scraper):
         )
 
     def __getRestaurantData(self, feedEventBody):
-        return [
-            {
+        restaurantData = []
+
+        for restaurant in feedEventBody['data']['feedItems']:
+            if 'store' not in restaurant: continue
+            restaurantData.append({
                 'name': restaurant['store']['title']['text'],
                 'category': self.category,
                 'coordinates': {
@@ -102,8 +105,9 @@ class RestaurantDataScraper(Scraper):
                     'long': restaurant['store']['mapMarker']['longitude']
                 },
                 'menu': []
-            } for restaurant in feedEventBody['data']['feedItems']
-        ]
+            })
+
+        return restaurantData
 
     def __addMenuDataToRestaurantsData(self):
 
