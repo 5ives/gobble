@@ -5,7 +5,7 @@ import { SearchCuisineBadgesWrapper } from "./SearchCuisinesBadgesStyles";
 const SearchCuisineBadges = ({ onClick } : { onClick : Function }) => {
     return (
         <SearchCuisineBadgesWrapper>
-            { CUISINES.map(cuisine => <SearchCuisineBadge cuisine={cuisine} onClick={onClick}/>) }
+            { CUISINES.map((cuisine, i) => <SearchCuisineBadge key={i} cuisine={cuisine} onClick={onClick}/>) }
         </SearchCuisineBadgesWrapper>
     )
 };
