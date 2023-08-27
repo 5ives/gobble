@@ -18,7 +18,7 @@ const SearchButton = () => {
 
     const onClick = async () => {
         if(!isSearchInputValid()) return;
-        setRestaurants(await getRestaurants(searchInput));
+        setRestaurants(await getRestaurants());
         setRoute(routes.MAP_ROUTE);
     };
 

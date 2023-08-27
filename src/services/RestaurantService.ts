@@ -1,7 +1,7 @@
-import { Filters } from "../types/filters.type";
-import { getRequest } from "../utils/apiUtils";
+import { API } from "aws-amplify";
+import { listRestaurants } from "../graphql/queries";
 
-export const getRestaurants = async (filters: Filters) => {
-    const restaurants = await getRequest('http://localhost:8080/api/v1/restaurants', filters);
-    return restaurants;
+export const getRestaurants = async () => {
+    const restaurants: any = await API.graphql({ query: listRestaurants });
+    return restaurants.data.listRestaurants.items;
 };
