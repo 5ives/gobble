@@ -7,22 +7,9 @@ export const batchAddMenuItems = /* GraphQL */ `
       id
       name
       price
-      restaurant {
-        id
-        name
-        lat
-        long
-        menuItems {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      restaurantId
       createdAt
       updatedAt
-      restaurantMenuItemsId
       __typename
     }
   }
@@ -37,19 +24,6 @@ export const createRestaurant = /* GraphQL */ `
       name
       lat
       long
-      menuItems {
-        items {
-          id
-          name
-          price
-          createdAt
-          updatedAt
-          restaurantMenuItemsId
-          __typename
-        }
-        nextToken
-        __typename
-      }
       createdAt
       updatedAt
       __typename
@@ -66,19 +40,6 @@ export const updateRestaurant = /* GraphQL */ `
       name
       lat
       long
-      menuItems {
-        items {
-          id
-          name
-          price
-          createdAt
-          updatedAt
-          restaurantMenuItemsId
-          __typename
-        }
-        nextToken
-        __typename
-      }
       createdAt
       updatedAt
       __typename
@@ -95,19 +56,6 @@ export const deleteRestaurant = /* GraphQL */ `
       name
       lat
       long
-      menuItems {
-        items {
-          id
-          name
-          price
-          createdAt
-          updatedAt
-          restaurantMenuItemsId
-          __typename
-        }
-        nextToken
-        __typename
-      }
       createdAt
       updatedAt
       __typename
@@ -123,22 +71,9 @@ export const createMenuItem = /* GraphQL */ `
       id
       name
       price
-      restaurant {
-        id
-        name
-        lat
-        long
-        menuItems {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      restaurantId
       createdAt
       updatedAt
-      restaurantMenuItemsId
       __typename
     }
   }
@@ -152,22 +87,9 @@ export const updateMenuItem = /* GraphQL */ `
       id
       name
       price
-      restaurant {
-        id
-        name
-        lat
-        long
-        menuItems {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      restaurantId
       createdAt
       updatedAt
-      restaurantMenuItemsId
       __typename
     }
   }
@@ -181,22 +103,9 @@ export const deleteMenuItem = /* GraphQL */ `
       id
       name
       price
-      restaurant {
-        id
-        name
-        lat
-        long
-        menuItems {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      restaurantId
       createdAt
       updatedAt
-      restaurantMenuItemsId
       __typename
     }
   }

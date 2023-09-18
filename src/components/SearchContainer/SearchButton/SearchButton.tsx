@@ -8,7 +8,7 @@ import { RouteContext } from '../../../context/useRouteContext/useRouteContext';
 import { IRouteContext } from '../../../context/useRouteContext/useRouteContextTypes';
 import { SearchContext } from '../../../context/useSearchContext/useSearchContext';
 import { ISearchContext } from '../../../context/useSearchContext/useSearchContextTypes';
-import { getRestaurants } from '../../../services/RestaurantService';
+import { getMenuItems, getRestaurantById, getRestaurants, searchRestaurants } from '../../../services/RestaurantService';
 import { SearchButtonRootStyle, SearchButtonWrapper } from './SearchButtonStyles';
 
 const SearchButton = () => {
@@ -18,13 +18,14 @@ const SearchButton = () => {
 
     const onClick = async () => {
         if(!isSearchInputValid()) return;
-        setRestaurants(await getRestaurants());
+        const targetRestaurants = await searchRestaurants(searchInput.cuisine, searchInput.minPrice, searchInput.maxPrice);
+        setRestaurants(targetRestaurants);
         setRoute(routes.MAP_ROUTE);
     };
 
     const isSearchInputValid = () => {
-        const uppercasedCuisine = searchInput.cuisine[0].toUpperCase() + searchInput.cuisine.slice(1);
-        if (!CUISINES.includes(uppercasedCuisine)) return false;
+        // const uppercasedCuisine = searchInput.cuisine[0].toUpperCase() + searchInput.cuisine.slice(1);
+        // if (!CUISINES.includes(uppercasedCuisine)) return false;
         if (searchInput.minPrice < 0 || searchInput.maxPrice > 100) return false;
         return true;
     };

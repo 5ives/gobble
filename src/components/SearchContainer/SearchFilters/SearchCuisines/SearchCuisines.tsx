@@ -16,7 +16,7 @@ const SearchCuisines = () => {
     return (
         <>   
             <Heading>Cuisines</Heading>
-            <SearchCuisinesInput value={searchInput.cuisine}/>
+            <SearchCuisinesInput value={searchInput.cuisine} onChange={handleCuisineChange}/>
             <SearchCuisineBadges onClick={handleCuisineChange}/>
         </>
     );

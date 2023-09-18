@@ -10,11 +10,4 @@ export const SearchCuisineBadgesWrapper = styled('div')`
     white-space: nowrap;
     display: flex;
     margin: ${MARGIN.SMALL_MEDIUM} 0;
-
-    /* Hides scrollbar */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-    &::-webkit-scrollbar { /* Chrome */
-        display: none;
-    }
 `;
