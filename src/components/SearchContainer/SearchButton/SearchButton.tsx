@@ -24,8 +24,6 @@ const SearchButton = () => {
     };
 
     const isSearchInputValid = () => {
-        // const uppercasedCuisine = searchInput.cuisine[0].toUpperCase() + searchInput.cuisine.slice(1);
-        // if (!CUISINES.includes(uppercasedCuisine)) return false;
         if (searchInput.minPrice < 0 || searchInput.maxPrice > 100) return false;
         return true;
     };
