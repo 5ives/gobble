@@ -1,0 +1,15 @@
+import { HEIGHT, MARGIN } from "./spacing";
+
+export const DROPDOWN_ITEM_HEIGHT = 32;
+
+export const DROPDOWN_MENU_PADDING = 8;
+
+export const CUISINE_BADGES_HEIGHT = HEIGHT.EXTRA_LARGE;
+
+export const HEADING_MARGIN = MARGIN.MEDIUM;
+
+export const SEARCH_CONTAINER_BOX_WIDTH = 729;
+
+export const SEARCH_CONTAINER_BOX_PADDING = 34.5;
+
+export const CUISINE_BADGE_MARGIN = MARGIN.EXTRA_SMALL;
