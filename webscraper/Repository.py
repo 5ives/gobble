@@ -1,6 +1,6 @@
-import psycopg2
 import json
-import os
+import requests
+import uuid
 
 from consts import INSERT_RESTAURANT_FILENAME, SEARCH_RESTAURANTS_FILENAME
 from sqlite3 import OperationalError
@@ -8,35 +8,96 @@ from Logger import Logger
 from re import sub
 from collections import defaultdict
 
-
 class Repository:
 
     def __init__(self):
-        self.connection = self.__getConnection()
-        self.cursor = self.__getCursor()
+        self.endpoint = "https://w4zdoqv4lfcxhn2db3vmpi5p3q.appsync-api.ap-southeast-2.amazonaws.com/graphql"
+        self.apiKey = "da2-bovlhswy3re6tbz722kqgqzxn4"
+
+    """
+        restaurantData: {
+            name: 'foo',
+            lat: 0.0,
+            long: 0.0,
+            menu: [ { name: 'bar', price: 10.00 } ]
+        }
+    """
 
     def insertRestaurant(self, restaurantData):
         restaurantData = self.__cleanupPriceData(restaurantData)
-        restaurantData = self.__cleanupRestaurantNames(restaurantData)
-        insertRestaurantFilePath = self.__getInsertRestaurantFilePath()
+        createRestaurant = """
+            mutation CreateRestaurant(
+                $input: CreateRestaurantInput!
+                $condition: ModelRestaurantConditionInput
+            ) {
+                createRestaurant(input: $input, condition: $condition) {
+                    id
+                    name
+                    lat
+                    long
+                    createdAt
+                    updatedAt
+                    __typename
+                }
+            }
+        """
 
-        try:
-            self.cursor.execute(open(insertRestaurantFilePath, "r").read().format(
-                json_input=restaurantData))
-        except Exception as error:
-            self.connection.rollback()
-            raise error
+        response = requests.post(
+            url=self.endpoint,
+            json={
+                "query": createRestaurant,
+                "variables": {
+                    "input": {
+                        "name": restaurantData['name'],
+                        "lat": restaurantData['coordinates']['lat'],
+                        "long": restaurantData['coordinates']['long']
+                    }
+                }
+            },
+            headers={"x-api-key": self.apiKey}
+        )
 
-        self.connection.commit()
+        responseJson = response.json()
+        restaurantId = responseJson['data']['createRestaurant']['id']
+        menuItemsWithRestaurantId = [dict(**menuItem, restaurantId=restaurantId) for menuItem in restaurantData['menu']]
+
+        createMenuItem = """
+            mutation CreateMenuItem(
+                $input: CreateMenuItemInput!
+                $condition: ModelMenuItemConditionInput
+            ) {
+                createMenuItem(input: $input, condition: $condition) {
+                    id
+                    name
+                    price
+                    restaurantId
+                    createdAt
+                    updatedAt
+                    __typename
+                }
+            }
+        """
+        for menuItem in menuItemsWithRestaurantId:
+            response = requests.post(
+                url=self.endpoint,
+                json={
+                    "query": createMenuItem,
+                    "variables": {
+                        "input": {
+                            "id": str(uuid.uuid4()),
+                            "name": menuItem['name'],
+                            "price": menuItem['price'],
+                            "restaurantId": menuItem['restaurantId']
+                        }
+                    }
+                },
+                headers={"x-api-key": self.apiKey}
+            )
 
     def hasRestaurant(self, lat, long):
-        try:
-            self.cursor.execute(
-                f"SELECT count(*) FROM locations WHERE lat = '{lat}' AND long = '{long}'")
-            count = self.cursor.fetchone()[0]
-        except Exception as error:
-            self.connection.rollback()
-            raise error
+
+        # get restaurant which matches lat and long
+        count = 0  # TODO: replace with endpoint which checks if restaurant exists
 
         return True if count > 0 else False
 
@@ -48,15 +109,7 @@ class Repository:
             return ValueError('category is empty')
 
         searchRestaurantsFilePath = self.__getSearchRestaurantsFilePath()
-
-        try:
-            self.cursor.execute(open(searchRestaurantsFilePath, "r").read().format(
-                minPrice=minPrice, maxPrice=maxPrice, category=category
-            ))
-            searchResults = self.cursor.fetchmany(3)
-        except Exception as error:
-            self.connection.rollback()
-            raise error
+        searchResults = []
 
         return self.__cleanupSearchResults(searchResults)
 
@@ -75,9 +128,9 @@ class Repository:
             'restaurantName': restaurantName,
             'lat': restaurantData[0]['lat'],
             'long': restaurantData[0]['long'],
-            'menuItems': list(map(lambda rdObj : {
+            'menuItems': list(map(lambda rdObj: {
                 'name': rdObj['menuItemName'],
-                'price': rdObj['menuItemPrice'] 
+                'price': rdObj['menuItemPrice']
             }, restaurantData))
         } for restaurantName, restaurantData in res.items()]
 
@@ -91,27 +144,4 @@ class Repository:
 
     # remove invalid apostrophes from restaurant names
     def __cleanupRestaurantNames(self, restaurantData):
-        return ('\'' + json.dumps(restaurantData).replace("'", "''") + '\'')
-
-    def __getSearchRestaurantFilePath(self):
-        return os.path.join(os.path.dirname(__file__), f'../db/{SEARCH_RESTAURANTS_FILENAME}')
-
-    def __getInsertRestaurantFilePath(self):
-        return os.path.join(os.path.dirname(__file__), f'../db/{INSERT_RESTAURANT_FILENAME}')
-
-    def __getCursor(self):
-        return self.connection.cursor()
-
-    def __getConnection(self):
-        try:
-            conn = psycopg2.connect("""
-                host=host
-                port=port
-                user=user
-                password=password
-                dbname=dbname
-            """)
-        except OperationalError as error:
-            Logger.log(error)
-            conn = None
-        return conn
+        return ('\'' + json.dumps(restaurantData).replace("'", "\'") + '\'')

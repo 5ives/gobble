@@ -37,6 +37,9 @@ class Scraper:
         sleep(2)
         self.driver = self.__setupDriver()
 
+    def gotoPrevPage(self):
+        self.driver.back()
+
     def __processBrowserPerformanceLogEntry(self, entry):
         response = json.loads(entry['message'])['message']
         return response

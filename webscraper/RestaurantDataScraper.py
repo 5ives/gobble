@@ -114,13 +114,16 @@ class RestaurantDataScraper(Scraper):
         for i in range(0, len(self.restaurantsData)):
 
             currRestaurantName = self.restaurantsData[i]['name']
-            currRestaurantLatitude = self.restaurantsData[i]['coordinates']['lat']
-            currRestaurantLongitude = self.restaurantsData[i]['coordinates']['long']
-            if self.repository.hasRestaurant(currRestaurantLatitude, currRestaurantLongitude):
-                Logger.log(f'{currRestaurantName} is already in the database')
-                continue 
+            # currRestaurantLatitude = self.restaurantsData[i]['coordinates']['lat']
+            # currRestaurantLongitude = self.restaurantsData[i]['coordinates']['long']
+            # if self.repository.hasRestaurant(currRestaurantLatitude, currRestaurantLongitude):
+            #     Logger.log(f'{currRestaurantName} is already in the database')
+            #     continue
 
-            self.__clickRestaurant(currRestaurantName)
+            if not self.__clickRestaurant(currRestaurantName):
+                self.gotoPrevPage()
+                if not self.__clickRestaurant(currRestaurantName):
+                    continue
             
             try:
                 spanTexts = self.__getSpanTexts()
@@ -129,21 +132,18 @@ class RestaurantDataScraper(Scraper):
                 self.restaurantsData[i]['menu'] = menuData
                 Logger.log(f'Scraped {len(menuData)} items of menu data for {currRestaurantName}')
             except Exception as exception:
-                Logger.log(f'Could not get menu data for {currRestaurantName}')
                 Logger.log(f'Exception: {exception}')
-                self.__resetDriverAndRouteToRestaurantsFeed()
+                self.gotoPrevPage()
                 continue
 
             try:
                 self.repository.insertRestaurant(self.restaurantsData[i])
-                Logger.log(f'Inserted {currRestaurantName} in the database')
             except Exception as exception:
-                Logger.log(f'{currRestaurantName} is already in the database')
                 Logger.log(f'Exception: {exception}')
-                self.__resetDriverAndRouteToRestaurantsFeed()
+                self.gotoPrevPage()
                 continue
 
-            self.__resetDriverAndRouteToRestaurantsFeed()
+            self.gotoPrevPage()
 
     def __resetDriverAndRouteToRestaurantsFeed(self):
         self.resetDriver()
@@ -157,15 +157,16 @@ class RestaurantDataScraper(Scraper):
             Logger.log(f'Could not find {restuarantName}')
             Logger.log(f'Exception: {exception}')
             return False
-        restaurantLink.click()
+        self.driver.execute_script("arguments[0].click();", restaurantLink)
         sleep(4)
+        return True
 
     def __getMenuData(self, spanTexts):
         spanTexts = self.__getSpanTexts()
         menuData = []
         for j in range(0, len(spanTexts)):
             if spanTexts[j].startswith('$'):
-                menuData.append({ 'name': spanTexts[j - 1], 'price': spanTexts[j], 'description': '' })
+                menuData.append({ 'name': spanTexts[j - 1], 'price': spanTexts[j] })
         if len(menuData) > 1: menuData.pop(0)
         return menuData
 
